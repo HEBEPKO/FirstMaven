@@ -6,6 +6,7 @@ import org.example.util.Util;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -13,8 +14,8 @@ public class Main {
 //        task1();
 //        task2();
 //        task3();
-        task4();
-//        task5();
+//        task4();
+        task5();
 //        task6();
 //        task7();
 //        task8();
@@ -74,6 +75,15 @@ public class Main {
 
     private static void task5() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        Optional<Animal> animalHungarian = animals.stream()
+                .filter(animal -> animal.getAge()>20&&animal.getAge()<30)
+                .filter(animal -> animal.getOrigin().equals("Hungarian"))
+                .findAny();
+        if (animalHungarian.isPresent()) {
+            System.out.println(animalHungarian);
+        } else {
+            System.out.println("Совподений не найдено");
+        }
     }
 
     private static void task6() throws IOException {
