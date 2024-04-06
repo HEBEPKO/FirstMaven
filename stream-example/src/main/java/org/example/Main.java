@@ -17,8 +17,8 @@ public class Main {
 //        task4();
 //        task5();
 //        task6();
-        task7();
-//        task8();
+//        task7();
+        task8();
 //        task9();
 //        task10();
 //        task11();
@@ -110,6 +110,12 @@ public class Main {
 
     private static void task8() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        Optional<Animal> animalAge =  animals.stream()
+                .sorted(Comparator.comparing(Animal::getBread))
+                .limit(100)
+                .sorted(Comparator.comparing(Animal::getAge).reversed())
+                .findAny();
+        System.out.println("Самое возрастное животное: \n" + animalAge.get());
     }
 
     private static void task9() throws IOException {
