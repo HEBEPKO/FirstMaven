@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) throws IOException {
 //        task1();
-        task2();
-//        task3();
+//        task2();
+        task3();
 //        task4();
 //        task5();
 //        task6();
@@ -56,6 +56,12 @@ public class Main {
 
     private static void task3() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        animals.stream()
+                .filter(animal -> animal.getAge() > 30)
+                .filter(animal -> animal.getOrigin().startsWith("A"))
+                .map(animal -> animal.getOrigin())
+                .distinct()
+                .forEach(System.out::println);
     }
 
     private static void task4() throws IOException {
