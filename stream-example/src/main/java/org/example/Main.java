@@ -12,8 +12,8 @@ public class Main {
     public static void main(String[] args) throws IOException {
 //        task1();
 //        task2();
-        task3();
-//        task4();
+//        task3();
+        task4();
 //        task5();
 //        task6();
 //        task7();
@@ -66,6 +66,10 @@ public class Main {
 
     private static void task4() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        long count = animals.stream()
+                .filter(animal -> animal.getGender().equals("Female"))
+                .count();
+        System.out.println("Общее колличество животных с gender='Female' равно " + count + " ос.");
     }
 
     private static void task5() throws IOException {
