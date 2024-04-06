@@ -6,11 +6,12 @@ import org.example.util.Util;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        task1();
-//        task2();
+//        task1();
+        task2();
 //        task3();
 //        task4();
 //        task5();
@@ -40,6 +41,17 @@ public class Main {
 
     private static void task2() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        animals.stream()
+                .filter(animal -> animal.getOrigin().equals("Japanese"))
+                .map(animal -> {
+                    if (animal.getGender().equals("Female")) {
+                        return animal.getBread().toUpperCase();
+                    } else {
+                        return animal.getBread().toLowerCase();
+                    }
+                })
+                .collect(Collectors.toList())
+                .forEach(System.out::println);
     }
 
     private static void task3() throws IOException {
