@@ -15,8 +15,8 @@ public class Main {
 //        task2();
 //        task3();
 //        task4();
-        task5();
-//        task6();
+//        task5();
+        task6();
 //        task7();
 //        task8();
 //        task9();
@@ -88,6 +88,14 @@ public class Main {
 
     private static void task6() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        boolean allMaleOrFemale = animals.stream()
+                .allMatch(animal -> animal.getGender().equals("Male") || animal.getGender().equals("Female"));
+
+        if (allMaleOrFemale) {
+            System.out.println("Все животные являются либо самцами, либо самками.");
+        } else {
+            System.out.println("Среди животных есть особи другого пола.");
+        }
     }
 
     private static void task7() throws IOException {
