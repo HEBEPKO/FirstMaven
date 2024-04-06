@@ -16,8 +16,8 @@ public class Main {
 //        task3();
 //        task4();
 //        task5();
-        task6();
-//        task7();
+//        task6();
+        task7();
 //        task8();
 //        task9();
 //        task10();
@@ -75,12 +75,11 @@ public class Main {
 
     private static void task5() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        Optional<Animal> animalHungarian = animals.stream()
+        boolean animalHungarian = animals.stream()
                 .filter(animal -> animal.getAge()>20&&animal.getAge()<30)
-                .filter(animal -> animal.getOrigin().equals("Hungarian"))
-                .findAny();
-        if (animalHungarian.isPresent()) {
-            System.out.println(animalHungarian);
+                .anyMatch(animal -> animal.getOrigin().equals("Hungarian"));
+        if (animalHungarian) {
+            System.out.println("Есть животные из Hungarian");
         } else {
             System.out.println("Совподений не найдено");
         }
@@ -100,6 +99,13 @@ public class Main {
 
     private static void task7() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        boolean anyOceania = animals.stream()
+                .noneMatch(animal -> animal.getOrigin().equals("Oceania"));
+        if (anyOceania) {
+            System.out.println("Животных из Oceania нет");
+        } else {
+            System.out.println("Есть животные из Oceania");
+        }
     }
 
     private static void task8() throws IOException {
