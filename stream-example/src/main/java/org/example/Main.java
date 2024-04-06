@@ -4,29 +4,38 @@ import org.example.model.*;
 import org.example.util.Util;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
         task1();
-        task2();
-        task3();
-        task4();
-        task5();
-        task6();
-        task7();
-        task8();
-        task9();
-        task10();
-        task11();
-        task12();
-        task13();
-        task14();
-        task15();
+//        task2();
+//        task3();
+//        task4();
+//        task5();
+//        task6();
+//        task7();
+//        task8();
+//        task9();
+//        task10();
+//        task11();
+//        task12();
+//        task13();
+//        task14();
+//        task15();
     }
 
     private static void task1() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        int numberOfAnimals = 7;
+        int zooNumber = 3;
+        animals.stream()
+                .filter(animal -> animal.getAge() > 10 && animal.getAge() < 20)
+                .sorted(Comparator.comparing(Animal::getAge))
+                .skip((zooNumber - 1) * numberOfAnimals)
+                .limit(numberOfAnimals)
+                .forEach(System.out::println);
     }
 
     private static void task2() throws IOException {
