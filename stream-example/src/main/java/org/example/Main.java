@@ -20,8 +20,8 @@ public class Main {
 //        task7();
 //        task8();
 //        task9();
-        task10();
-//        task11();
+//        task10();
+        task11();
 //        task12();
 //        task13();
 //        task14();
@@ -139,6 +139,11 @@ public class Main {
 
     private static void task11() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        int totalAgeOfIndonesian = animals.stream()
+                .filter(animal -> animal.getOrigin().equals("Indonesian"))
+                .mapToInt(Animal::getAge)
+                .sum();
+        System.out.println("Сумарный возраст животных из Indonesian: " + totalAgeOfIndonesian);
     }
 
     private static void task12() throws IOException {
