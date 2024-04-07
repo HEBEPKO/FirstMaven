@@ -4,6 +4,8 @@ import org.example.model.*;
 import org.example.util.Util;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -21,8 +23,8 @@ public class Main {
 //        task8();
 //        task9();
 //        task10();
-        task11();
-//        task12();
+//        task11();
+        task12();
 //        task13();
 //        task14();
 //        task15();
@@ -148,6 +150,14 @@ public class Main {
 
     private static void task12() throws IOException {
         List<Person> people = Util.getPersons();
+        people.stream()
+                .filter(person -> person.getGender().equals("Male"))
+                .filter(person ->
+                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears()>18&&
+                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears()<27)
+                .sorted(Comparator.comparing(Person::getRecruitmentGroup))
+                .limit(200)
+                .forEach(System.out::println);
     }
 
     private static void task13() throws IOException {
