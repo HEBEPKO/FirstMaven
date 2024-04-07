@@ -18,8 +18,8 @@ public class Main {
 //        task5();
 //        task6();
 //        task7();
-        task8();
-//        task9();
+//        task8();
+        task9();
 //        task10();
 //        task11();
 //        task12();
@@ -120,6 +120,13 @@ public class Main {
 
     private static void task9() throws IOException {
         List<Animal> animals = Util.getAnimals();
+        int shortestArrayLength = animals.stream()
+                .map(animal -> animal.getBread()
+                        .toCharArray())
+                .map(chars -> chars.length)
+                .min(Integer::compare)
+                .orElse(0);
+        System.out.println("Длина самого короткого массива: " + shortestArrayLength);
     }
 
     private static void task10() throws IOException {
