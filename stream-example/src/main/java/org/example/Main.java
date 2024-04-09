@@ -26,8 +26,8 @@ public class Main {
 //        task10();
 //        task11();
 //        task12();
-        task13();
-//        task14();
+//        task13();
+        task14();
 //        task15();
     }
 
@@ -163,10 +163,10 @@ public class Main {
 
     private static void task13() throws IOException {
         List<House> houses = Util.getHouses();
-        List<Person> evacuationPriority = Stream.concat(houses
-                                .stream()
+        List<Person> evacuationPriority = Stream.concat(houses.stream()
                                 .filter(house -> house.getBuildingType().equals("Hospital"))
-                                .flatMap(house -> house.getPersonList().stream()),
+                                .flatMap(house -> house.getPersonList()
+                                        .stream()),
                         Stream.concat(houses
                                         .stream()
                                         .flatMap(house ->
@@ -186,12 +186,52 @@ public class Main {
                                                                         Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 65)))
                 )
                 .limit(500)
+                .distinct()
                 .collect(Collectors.toList());
         System.out.println("Первоя очередь эвакуации " + evacuationPriority.size() + " человек:\n" + evacuationPriority + "\n");
     }
 
     private static void task14() throws IOException {
         List<Car> cars = Util.getCars();
+        double transportCostPerTon = 7.14;
+        cars.stream()
+                .collect(Collectors.groupingBy(car -> {
+                    if (car.getCarMake().equals("Jaguar") || car.getColor().equals("White")) {
+                       return "Turkmenistan";
+                    } else if (car.getMass()<=1500 &&
+                            (car.getCarModel().equals("BMW") ||
+                            car.getCarModel().equals("Lexus") ||
+                            car.getCarModel().equals("Chrysler") ||
+                            car.getCarModel().equals("Toyota")
+                    )) {
+                        return "Uzbekistan";
+                    } else if ((car.getColor().equals("Black") &&
+                            car.getMass()>4000) &&
+                            (car.getCarModel().equals("GMC") ||
+                            car.getCarModel().equals("Dodge"))) {
+                        return "Kazakhstan";
+                    } else if (car.getReleaseYear() < 1982 ||
+                            (car.getCarModel().equals("Civic") &&
+                            car.getCarModel().equals("Cherokee"))) {
+                        return "Kyrgyzstan";
+                    } else if ((!car.getColor().equals("Yellow") &&
+                            !car.getColor().equals("Red") &&
+                            !car.getColor().equals("Green") &&
+                            !car.getColor().equals("Blue")) || car.getPrice()>4000) {
+                        return "Russia";
+                    } else if (car.getVin().contains("59")) {
+                        return "Mongolia";
+                    }
+                    else {
+                        System.out.println("Остались Uzbekistan подходят '" + car.getCarModel() + "'\n");
+                        return "NotAssigned";
+                    }
+                }))
+                .forEach((country, carList) -> {
+                    int totalMass = carList.stream().mapToInt(car -> car.getMass()).sum();
+                    double transportCosts = totalMass * transportCostPerTon;
+                    System.out.println("Транспортные расходы для " + country + ": $" + transportCosts);
+                });
     }
 
     private static void task15() throws IOException {
