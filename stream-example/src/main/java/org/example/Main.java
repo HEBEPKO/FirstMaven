@@ -14,20 +14,20 @@ import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-//        task1();
-//        task2();
-//        task3();
-//        task4();
-//        task5();
-//        task6();
-//        task7();
-//        task8();
-//        task9();
-//        task10();
-//        task11();
-//        task12();
-//        task13();
-//        task14();
+        task1();
+        task2();
+        task3();
+        task4();
+        task5();
+        task6();
+        task7();
+        task8();
+        task9();
+        task10();
+        task11();
+        task12();
+        task13();
+        task14();
         task15();
     }
 
@@ -54,7 +54,7 @@ public class Main {
                         return animal.getBread().toLowerCase();
                     }
                 })
-                .collect(Collectors.toList())
+                .toList()
                 .forEach(System.out::println);
     }
 
@@ -62,8 +62,8 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
         animals.stream()
                 .filter(animal -> animal.getAge() > 30)
-                .filter(animal -> animal.getOrigin().startsWith("A"))
-                .map(animal -> animal.getOrigin())
+                .map(Animal::getOrigin)
+                .filter(origin -> origin.startsWith("A"))
                 .distinct()
                 .forEach(System.out::println);
     }
@@ -185,9 +185,9 @@ public class Main {
                                                                 Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 18 &&
                                                                         Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 65)))
                 )
-                .limit(500)
                 .distinct()
-                .collect(Collectors.toList());
+                .limit(500)
+                .toList();
         System.out.println("Первоя очередь эвакуации " + evacuationPriority.size() + " человек:\n" + evacuationPriority + "\n");
     }
 
@@ -228,7 +228,7 @@ public class Main {
                     }
                 }))
                 .forEach((country, carList) -> {
-                    int totalMass = carList.stream().mapToInt(car -> car.getMass()).sum();
+                    int totalMass = carList.stream().mapToInt(Car::getMass).sum();
                     double transportCosts = totalMass * transportCostPerTon;
                     System.out.println("Транспортные расходы для " + country + ": $" + transportCosts);
                 });
@@ -236,7 +236,7 @@ public class Main {
 
     private static void task15() throws IOException {
         List<Flower> flowers = Util.getFlowers();
-        Double totalMaintenanceCost;
+        double totalMaintenanceCost;
         totalMaintenanceCost =
                 flowers.stream()
                 .sorted(Comparator.comparing(Flower::getOrigin).reversed())
@@ -246,7 +246,7 @@ public class Main {
                         flower.getCommonName().startsWith("C")))
                 .mapToDouble(flower -> {
 
-                    if ((flower.isShadePreferred()==true) &&
+                    if ((flower.isShadePreferred()) &&
                             (flower.getFlowerVaseMaterial().contains("Glass") ||
                                     flower.getFlowerVaseMaterial().contains("Aluminum") ||
                                     flower.getFlowerVaseMaterial().contains("Steel"))){
