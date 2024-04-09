@@ -106,8 +106,8 @@ public class Person {
 
     @Override
     public String toString() {
-        return "Person{id=" + id + ", firstName='" + firstName + ", lastName='" + lastName + ", dateOfBirth="
-            + dateOfBirth + ", email='" + email + ", gender='" + gender + ", recruitmentGroup=" + recruitmentGroup
-            + ", city='" + city + ", occupation='" + occupation;
+        return "Person{id=" + id + "\nfirstName='" + firstName + "', lastName='" + lastName + "'\ndateOfBirth="
+            + dateOfBirth + "', email='" + email + "'\ngender='" + gender + "', 'recruitmentGroup=" + recruitmentGroup
+            + "', city='" + city + "\noccupation='" + occupation + "'\n";
     }
 }

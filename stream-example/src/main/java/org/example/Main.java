@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -24,8 +25,8 @@ public class Main {
 //        task9();
 //        task10();
 //        task11();
-        task12();
-//        task13();
+//        task12();
+        task13();
 //        task14();
 //        task15();
     }
@@ -78,7 +79,7 @@ public class Main {
     private static void task5() throws IOException {
         List<Animal> animals = Util.getAnimals();
         boolean animalHungarian = animals.stream()
-                .filter(animal -> animal.getAge()>20&&animal.getAge()<30)
+                .filter(animal -> animal.getAge() > 20 && animal.getAge() < 30)
                 .anyMatch(animal -> animal.getOrigin().equals("Hungarian"));
         if (animalHungarian) {
             System.out.println("Есть животные из Hungarian");
@@ -112,7 +113,7 @@ public class Main {
 
     private static void task8() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        Optional<Animal> animalAge =  animals.stream()
+        Optional<Animal> animalAge = animals.stream()
                 .sorted(Comparator.comparing(Animal::getBread))
                 .limit(100)
                 .sorted(Comparator.comparing(Animal::getAge).reversed())
@@ -153,8 +154,8 @@ public class Main {
         people.stream()
                 .filter(person -> person.getGender().equals("Male"))
                 .filter(person ->
-                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears()>18&&
-                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears()<27)
+                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 18 &&
+                                Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 27)
                 .sorted(Comparator.comparing(Person::getRecruitmentGroup))
                 .limit(200)
                 .forEach(System.out::println);
@@ -162,6 +163,31 @@ public class Main {
 
     private static void task13() throws IOException {
         List<House> houses = Util.getHouses();
+        List<Person> evacuationPriority = Stream.concat(houses
+                                .stream()
+                                .filter(house -> house.getBuildingType().equals("Hospital"))
+                                .flatMap(house -> house.getPersonList().stream()),
+                        Stream.concat(houses
+                                        .stream()
+                                        .flatMap(house ->
+                                                house.getPersonList()
+                                                        .stream()
+                                                        .filter(person ->
+                                                                Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 0 &&
+                                                                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 18 ||
+                                                                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 65)
+                                        ),
+                                houses.stream()
+                                        .flatMap(house ->
+                                                house.getPersonList()
+                                                        .stream()
+                                                        .filter(person ->
+                                                                Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 18 &&
+                                                                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 65)))
+                )
+                .limit(500)
+                .collect(Collectors.toList());
+        System.out.println("Первоя очередь эвакуации " + evacuationPriority.size() + " человек:\n" + evacuationPriority + "\n");
     }
 
     private static void task14() throws IOException {
