@@ -27,8 +27,8 @@ public class Main {
 //        task11();
 //        task12();
 //        task13();
-        task14();
-//        task15();
+//        task14();
+        task15();
     }
 
     private static void task1() throws IOException {
@@ -236,6 +236,26 @@ public class Main {
 
     private static void task15() throws IOException {
         List<Flower> flowers = Util.getFlowers();
+        Double totalMaintenanceCost;
+        totalMaintenanceCost =
+                flowers.stream()
+                .sorted(Comparator.comparing(Flower::getOrigin).reversed())
+                .sorted(Comparator.comparing(Flower::getPrice))
+                .sorted(Comparator.comparing(Flower::getWaterConsumptionPerDay))
+                .sorted(Comparator.comparing(flower -> flower.getCommonName().startsWith("S") &&
+                        flower.getCommonName().startsWith("C")))
+                .mapToDouble(flower -> {
+
+                    if ((flower.isShadePreferred()==true) &&
+                            (flower.getFlowerVaseMaterial().contains("Glass") ||
+                                    flower.getFlowerVaseMaterial().contains("Aluminum") ||
+                                    flower.getFlowerVaseMaterial().contains("Steel"))){
+                        return flower.getPrice() + flower.getWaterConsumptionPerDay()*5*365*1.39;
+                    }
+                    return 0;
+                })
+                .sum();
+        System.out.println("Общая стоимость обслуживания всех растений: $" + totalMaintenanceCost);
     }
 
 }
