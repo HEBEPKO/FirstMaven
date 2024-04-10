@@ -245,9 +245,7 @@ public class Main {
                 .sorted(Comparator.comparing(Flower::getCommonName).reversed())
                         .dropWhile(flower -> !flower.getCommonName().startsWith("S"))
                         .takeWhile(flower -> !flower.getCommonName().startsWith("C"))
-                .peek(System.out::println)
                 .mapToDouble(flower -> {
-
                     if ((flower.isShadePreferred()) &&
                             (flower.getFlowerVaseMaterial().contains("Glass") ||
                                     flower.getFlowerVaseMaterial().contains("Aluminum") ||
@@ -257,7 +255,7 @@ public class Main {
                     return 0;
                 })
                 .sum();
-        System.out.println("Общая стоимость обслуживания всех растений: $" + totalMaintenanceCost);
+        System.out.println("Общая стоимость обслуживания за 5 лет всех отобраных растений составит: $" + String.format("%.2f",totalMaintenanceCost));
     }
 
 }
