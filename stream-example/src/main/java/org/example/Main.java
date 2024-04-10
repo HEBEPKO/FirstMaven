@@ -14,20 +14,20 @@ import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        task1();
-        task2();
-        task3();
-        task4();
-        task5();
-        task6();
-        task7();
-        task8();
-        task9();
-        task10();
-        task11();
-        task12();
-        task13();
-        task14();
+//        task1();
+//        task2();
+//        task3();
+//        task4();
+//        task5();
+//        task6();
+//        task7();
+//        task8();
+//        task9();
+//        task10();
+//        task11();
+//        task12();
+//        task13();
+//        task14();
         task15();
     }
 
@@ -242,8 +242,10 @@ public class Main {
                 .sorted(Comparator.comparing(Flower::getOrigin).reversed())
                 .sorted(Comparator.comparing(Flower::getPrice))
                 .sorted(Comparator.comparing(Flower::getWaterConsumptionPerDay))
-                .sorted(Comparator.comparing(flower -> flower.getCommonName().startsWith("S") &&
-                        flower.getCommonName().startsWith("C")))
+                .sorted(Comparator.comparing(Flower::getCommonName).reversed())
+                        .dropWhile(flower -> !flower.getCommonName().startsWith("S"))
+                        .takeWhile(flower -> !flower.getCommonName().startsWith("C"))
+                .peek(System.out::println)
                 .mapToDouble(flower -> {
 
                     if ((flower.isShadePreferred()) &&
