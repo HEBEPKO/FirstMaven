@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-//        task1();
+        task1();
 //        task2();
 //        task3();
 //        task4();
@@ -28,19 +28,20 @@ public class Main {
 //        task12();
 //        task13();
 //        task14();
-        task15();
+//        task15();
     }
 
     private static void task1() throws IOException {
         List<Animal> animals = Util.getAnimals();
         int numberOfAnimals = 7;
         int zooNumber = 3;
+        System.out.println("Seven animals will come to the third zoo: ");
         animals.stream()
                 .filter(animal -> animal.getAge() > 10 && animal.getAge() < 20)
                 .sorted(Comparator.comparing(Animal::getAge))
                 .skip((zooNumber - 1) * numberOfAnimals)
                 .limit(numberOfAnimals)
-                .forEach(System.out::println);
+                .forEach(x -> System.out.println("This: " + x));
     }
 
     private static void task2() throws IOException {
