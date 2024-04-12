@@ -48,14 +48,10 @@ public class Main {
         List<Animal> animals = Util.getAnimals();
         animals.stream()
                 .filter(animal -> animal.getOrigin().equals("Japanese"))
-                .map(animal -> {
-                    if (animal.getGender().equals("Female")) {
-                        return animal.getBread().toUpperCase();
-                    } else {
-                        return animal.getBread().toLowerCase();
-                    }
-                })
-                .toList()
+                .map(animal ->
+                        "Female".equalsIgnoreCase(animal.getGender()) ?
+                                animal.getBread().toUpperCase() :
+                                animal.getBread())
                 .forEach(System.out::println);
     }
 
