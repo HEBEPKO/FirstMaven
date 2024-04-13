@@ -139,10 +139,15 @@ public class Main {
     private static void task11() throws IOException {
         List<Animal> animals = Util.getAnimals();
         int totalAgeOfIndonesian = animals.stream()
-                .filter(animal -> animal.getOrigin().equals("Indonesian"))
+                .filter(animal -> "Indonesian".equalsIgnoreCase(animal.getOrigin()))
                 .mapToInt(Animal::getAge)
                 .sum();
-        System.out.println("Сумарный возраст животных из Indonesian: " + totalAgeOfIndonesian);
+        int totalAnimalIndonesian = animals.stream()
+                .filter(animal -> "Indonesian".equalsIgnoreCase(animal.getOrigin()))
+                .toList()
+                .size();
+
+        System.out.println("Сумарный возраст животных из Indonesian: " + totalAgeOfIndonesian/totalAnimalIndonesian);
     }
 
     private static void task12() throws IOException {
