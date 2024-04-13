@@ -113,8 +113,7 @@ public class Main {
         Optional<Animal> animalAge = animals.stream()
                 .sorted(Comparator.comparing(Animal::getBread))
                 .limit(100)
-                .sorted(Comparator.comparing(Animal::getAge).reversed())
-                .findAny();
+                .max(Comparator.comparing(Animal::getAge));
         System.out.println("Самое возрастное животное: \n" + animalAge.get());
     }
 
