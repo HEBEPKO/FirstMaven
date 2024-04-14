@@ -147,7 +147,7 @@ public class Main {
                 .toList()
                 .size();
 
-        System.out.println("Сумарный возраст животных из Indonesian: " + totalAgeOfIndonesian/totalAnimalIndonesian);
+        System.out.println("Средний возраст животных из Indonesian: " + totalAgeOfIndonesian/totalAnimalIndonesian);
     }
 
     private static void task12() throws IOException {
