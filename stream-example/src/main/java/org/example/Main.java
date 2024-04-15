@@ -4,9 +4,12 @@ import org.example.model.*;
 import org.example.util.Util;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -27,7 +30,7 @@ public class Main {
 //        task8();
 //        task9();
 //        task10();
-//        task11();
+        task11();
 //        task12();
         task13();
 //        task14();
@@ -141,16 +144,12 @@ public class Main {
 
     private static void task11() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        int totalAgeOfIndonesian = animals.stream()
+        OptionalDouble totalAgeOfIndonesian = animals.stream()
                 .filter(animal -> "Indonesian".equalsIgnoreCase(animal.getOrigin()))
                 .mapToInt(Animal::getAge)
-                .sum();
-        int totalAnimalIndonesian = animals.stream()
-                .filter(animal -> "Indonesian".equalsIgnoreCase(animal.getOrigin()))
-                .toList()
-                .size();
+                .average();
 
-        System.out.println("Средний возраст животных из Indonesian: " + totalAgeOfIndonesian/totalAnimalIndonesian);
+        System.out.println("Средний возраст животных из Indonesian: " + totalAgeOfIndonesian.getAsDouble());
     }
 
     private static void task12() throws IOException {
