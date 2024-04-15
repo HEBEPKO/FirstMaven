@@ -9,6 +9,7 @@ import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -138,16 +139,12 @@ public class Main {
 
     private static void task11() throws IOException {
         List<Animal> animals = Util.getAnimals();
-        int totalAgeOfIndonesian = animals.stream()
+        OptionalDouble totalAgeOfIndonesian = animals.stream()
                 .filter(animal -> "Indonesian".equalsIgnoreCase(animal.getOrigin()))
                 .mapToInt(Animal::getAge)
-                .sum();
-        int totalAnimalIndonesian = animals.stream()
-                .filter(animal -> "Indonesian".equalsIgnoreCase(animal.getOrigin()))
-                .toList()
-                .size();
+                .average();
 
-        System.out.println("Средний возраст животных из Indonesian: " + totalAgeOfIndonesian/totalAnimalIndonesian);
+        System.out.println("Средний возраст животных из Indonesian: " + totalAgeOfIndonesian.getAsDouble());
     }
 
     private static void task12() throws IOException {
