@@ -4,13 +4,16 @@ import org.example.model.*;
 import org.example.util.Util;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.mapping;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -24,9 +27,9 @@ public class Main {
 //        task8();
 //        task9();
 //        task10();
-        task11();
+//        task11();
 //        task12();
-//        task13();
+        task13();
 //        task14();
 //        task15();
     }
@@ -164,99 +167,116 @@ public class Main {
 
     private static void task13() throws IOException {
         List<House> houses = Util.getHouses();
+        Predicate<House> hospitalPredicate =
+                house -> "Hospital".equals(house.getBuildingType());
+        Predicate<Person> upTo_18AndMen_65AndWomen_60 = person -> {
+            return ((Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 18) ||
+                    (Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 65
+                            && "Female".equalsIgnoreCase(person.getGender())) ||
+                            (Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 60
+                            && "Male".equalsIgnoreCase(person.getGender()))
+                    );
+        };
+        Function<House, Stream<? extends Person>> houseStreamToPersonStreamFunction =
+                house -> house.getPersonList().stream();
+
         List<Person> evacuationPriority = Stream.concat(houses.stream()
-                                .filter(house -> house.getBuildingType().equals("Hospital"))
-                                .flatMap(house -> house.getPersonList()
-                                        .stream()),
-                        Stream.concat(houses
-                                        .stream()
-                                        .flatMap(house ->
-                                                house.getPersonList()
-                                                        .stream()
-                                                        .filter(person ->
-                                                                Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 0 &&
-                                                                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 18 ||
-                                                                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 65)
-                                        ),
+                                .filter(hospitalPredicate)
+                                .flatMap(houseStreamToPersonStreamFunction),
+                        Stream.concat(houses.stream()
+                                        .filter(hospitalPredicate.negate())
+                                        .flatMap(houseStreamToPersonStreamFunction)
+                                        .filter(upTo_18AndMen_65AndWomen_60),
                                 houses.stream()
-                                        .flatMap(house ->
-                                                house.getPersonList()
-                                                        .stream()
-                                                        .filter(person ->
-                                                                Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 18 &&
-                                                                        Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 65)))
-                )
-                .distinct()
+                                        .filter(hospitalPredicate.negate())
+                                        .flatMap(houseStreamToPersonStreamFunction)
+                                        .filter(upTo_18AndMen_65AndWomen_60.negate())))
                 .limit(500)
                 .toList();
         System.out.println("Первоя очередь эвакуации " + evacuationPriority.size() + " человек:\n" + evacuationPriority + "\n");
     }
 
-    private static void task14() throws IOException {
-        List<Car> cars = Util.getCars();
-        double transportCostPerTon = 7.14;
-        cars.stream()
-                .collect(Collectors.groupingBy(car -> {
-                    if (car.getCarMake().equals("Jaguar") || car.getColor().equals("White")) {
-                       return "Turkmenistan";
-                    } else if (car.getMass()<=1500 &&
-                            (car.getCarModel().equals("BMW") ||
-                            car.getCarModel().equals("Lexus") ||
-                            car.getCarModel().equals("Chrysler") ||
-                            car.getCarModel().equals("Toyota")
-                    )) {
-                        return "Uzbekistan";
-                    } else if ((car.getColor().equals("Black") &&
-                            car.getMass()>4000) &&
-                            (car.getCarModel().equals("GMC") ||
-                            car.getCarModel().equals("Dodge"))) {
-                        return "Kazakhstan";
-                    } else if (car.getReleaseYear() < 1982 ||
-                            (car.getCarModel().equals("Civic") &&
-                            car.getCarModel().equals("Cherokee"))) {
-                        return "Kyrgyzstan";
-                    } else if ((!car.getColor().equals("Yellow") &&
-                            !car.getColor().equals("Red") &&
-                            !car.getColor().equals("Green") &&
-                            !car.getColor().equals("Blue")) || car.getPrice()>4000) {
-                        return "Russia";
-                    } else if (car.getVin().contains("59")) {
-                        return "Mongolia";
-                    }
-                    else {
-                        System.out.println("Остались Uzbekistan подходят '" + car.getCarModel() + "'\n");
-                        return "NotAssigned";
-                    }
-                }))
-                .forEach((country, carList) -> {
-                    int totalMass = carList.stream().mapToInt(Car::getMass).sum();
-                    double transportCosts = totalMass * transportCostPerTon;
-                    System.out.println("Транспортные расходы для " + country + ": $" + transportCosts);
-                });
-    }
+//    private static void task14() throws IOException {
+//        List<Car> cars = Util.getCars();
+//        double transportCostPerTon = 7.14;
+//        List<Double> coutCost = new ArrayList<Double>();
+//
+//        cars.stream()
+//                .filter(car -> Boolean.parseBoolean(sortedCarForCountry(car)))
+//                .collect(Collectors.groupingBy(car -> sortedCarForCountry(car)))
+//                .forEach((country, carList) -> {
+//                    int totalMass = carList.stream().mapToInt(Car::getMass).sum();
+//                    double transportCosts = totalMass * transportCostPerTon;
+//                    coutCost.add(transportCosts);
+//                    System.out.println("Транспортные расходы для " + country + ": $" + formatDouble(transportCosts));
+//                });
+//
+//        Optional<Double> x = coutCost.stream().reduce(Double::sum);
+//
+////        System.out.println("Доход транспортной компании составит: " + formatDouble(x.get()));
+//    }
 
-    private static void task15() throws IOException {
-        List<Flower> flowers = Util.getFlowers();
-        double totalMaintenanceCost;
-        totalMaintenanceCost =
-                flowers.stream()
-                .sorted(Comparator.comparing(Flower::getOrigin).reversed())
-                .sorted(Comparator.comparing(Flower::getPrice))
-                .sorted(Comparator.comparing(Flower::getWaterConsumptionPerDay))
-                .sorted(Comparator.comparing(Flower::getCommonName).reversed())
-                        .dropWhile(flower -> !flower.getCommonName().startsWith("S"))
-                        .takeWhile(flower -> !flower.getCommonName().startsWith("C"))
-                .mapToDouble(flower -> {
-                    if ((flower.isShadePreferred()) &&
-                            (flower.getFlowerVaseMaterial().contains("Glass") ||
-                                    flower.getFlowerVaseMaterial().contains("Aluminum") ||
-                                    flower.getFlowerVaseMaterial().contains("Steel"))){
-                        return flower.getPrice() + flower.getWaterConsumptionPerDay()*5*365*1.39;
-                    }
-                    return 0;
-                })
-                .sum();
-        System.out.println("Общая стоимость обслуживания за 5 лет всех отобраных растений составит: $" + String.format("%.2f",totalMaintenanceCost));
-    }
+//    private static void task15() throws IOException {
+//        List<Flower> flowers = Util.getFlowers();
+//        double totalMaintenanceCost;
+//        totalMaintenanceCost =
+//                flowers.stream()
+//                .sorted(Comparator.comparing(Flower::getOrigin).reversed())
+//                .sorted(Comparator.comparing(Flower::getPrice))
+//                .sorted(Comparator.comparing(Flower::getWaterConsumptionPerDay))
+//                .sorted(Comparator.comparing(Flower::getCommonName).reversed())
+//                        .dropWhile(flower -> !flower.getCommonName().startsWith("S"))
+//                        .takeWhile(flower -> !flower.getCommonName().startsWith("C"))
+//                .mapToDouble(flower -> {
+//                    if ((flower.isShadePreferred()) &&
+//                            (flower.getFlowerVaseMaterial().contains("Glass") ||
+//                                    flower.getFlowerVaseMaterial().contains("Aluminum") ||
+//                                    flower.getFlowerVaseMaterial().contains("Steel"))){
+//                        return flower.getPrice() + flower.getWaterConsumptionPerDay()*5*365*1.39;
+//                    }
+//                    return 0;
+//                })
+//                .sum();
+//        System.out.println("Общая стоимость обслуживания за 5 лет всех отобраных растений составит: $" + String.format("%.2f",totalMaintenanceCost));
+//    }
 
+//    private static String sortedCarForCountry(Car car) {
+//        if ("Jaguar".equals(car.getCarMake()) || "White".equals(car.getColor())) {
+//            return "Turkmenistan";
+//        } else if (car.getMass() <= 1500 ||
+//                ("BMW".equals(car.getCarMake()) ||
+//                        "Lexus".equals(car.getCarMake()) ||
+//                        "Chrysler".equals(car.getCarMake()) ||
+//                        "Toyota".equals(car.getCarMake())
+//                )) {
+//            return "Uzbekistan";
+//        } else if (("Black".equals(car.getColor()) &&
+//                car.getMass() > 4000) ||
+//                ("GMC".equals(car.getCarMake()) ||
+//                        "Dodge".equals(car.getCarMake()))) {
+//            return "Kazakhstan";
+//        } else if (car.getReleaseYear() < 1982 ||
+//                ("Civic".equals(car.getCarModel()) &&
+//                        "Cherokee".equals(car.getCarModel()))) {
+//            return "Kyrgyzstan";
+//        } else if (
+//                (!("Yellow".equals(car.getColor()) ||
+//                "Red".equals(car.getColor()) ||
+//                "Green".equals(car.getColor()) ||
+//                "Blue".equals(car.getColor()))) ||
+//                car.getPrice() > 40000
+//        ){
+//            return "Russia";
+//        } else if (car.getVin().contains("59")) {
+//            return "Mongolia";
+//        } else {
+//            return "V";
+//        }
+//    }
+
+//    private static String formatDouble(double d){
+//        BigDecimal result = new BigDecimal(d);
+//        result = result.setScale(2, BigDecimal.ROUND_DOWN);
+//        return String.valueOf(result);
+//    }
 }
