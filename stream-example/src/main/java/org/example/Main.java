@@ -5,6 +5,7 @@ import org.example.util.Util;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.Comparator;
 import java.util.List;
@@ -169,10 +170,10 @@ public class Main {
         Predicate<House> hospitalPredicate =
                 house -> "Hospital".equals(house.getBuildingType());
         Predicate<Person> upTo_18AndMen_65AndWomen_60 = person -> {
-            return ((Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() < 18) ||
-                    (Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 65
+            return ((person.getDateOfBirth().atStartOfDay().isBefore(LocalDateTime.now().minusYears(18))) ||
+                    (person.getDateOfBirth().atStartOfDay().isBefore(LocalDateTime.now().minusYears(65))
                             && "Female".equalsIgnoreCase(person.getGender())) ||
-                            (Period.between(person.getDateOfBirth(), LocalDate.now()).getYears() > 60
+                            (person.getDateOfBirth().atStartOfDay().isBefore(LocalDateTime.now().minusYears(60))
                             && "Male".equalsIgnoreCase(person.getGender()))
                     );
         };
